@@ -67,7 +67,7 @@ public class VentanaPrincipal extends JFrame {
         JButton salirBtn = crearBotonMenu("/assets/salir.png", 300, 80);
         salirBtn.setBounds(xCentrado, yInicial + (espaciado * 3), anchoBoton, altoBoton);
         salirBtn.addActionListener(e -> {
-            detenerMusicaMenu();
+            detenerMusicaJuego();
             System.exit(0);
         });
         panelConFondo.add(salirBtn);
@@ -119,7 +119,7 @@ public class VentanaPrincipal extends JFrame {
         }
     }
 
-    private void detenerMusicaMenu() {
+    private void detenerMusicaJuego() {
         if (musicaMenu != null) {
             musicaMenu.stop();
             musicaMenu.close();
@@ -260,7 +260,7 @@ public class VentanaPrincipal extends JFrame {
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            detenerMusicaMenu();
+            detenerMusicaJuego();
             frameSeleccion.dispose();
             abrirJuego();
         });
@@ -428,24 +428,37 @@ public class VentanaPrincipal extends JFrame {
     }
 
     private void abrirJuego() {
+        // Detener la música del menú antes de cerrar
+        detenerMusicaJuego();
+
         JFrame frameJuego = new JFrame("Juego de Motos Tron - 2 Jugadores con Habilidades");
-        frameJuego.add(new TronGame(colorJugador1, colorJugador2));
-        frameJuego.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        TronGame tronGame = new TronGame(colorJugador1, colorJugador2);
+        frameJuego.add(tronGame);
+        frameJuego.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameJuego.pack();
         frameJuego.setLocationRelativeTo(null);
+        frameJuego.setResizable(false);
         frameJuego.setVisible(true);
 
+        // Cerrar la ventana principal
+        this.dispose();
+
+        // Opcional: Si quieres que vuelva al menú al cerrar el juego
         frameJuego.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                reanudarMusicaMenu();
+                tronGame.dispose();
+                // Opcional: Reabrir el menú principal
+                // new VentanaPrincipal();
             }
         });
     }
 
+
+
     @Override
     public void dispose() {
-        detenerMusicaMenu();
+        detenerMusicaJuego();
         super.dispose();
     }
 

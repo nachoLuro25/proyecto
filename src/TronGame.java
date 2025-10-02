@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class TronGame extends JPanel implements ActionListener, KeyListener {
 
-    private static final int WIDTH = 1920;
-    private static final int HEIGHT = 1080;
+    private static final int WIDTH = 1320;
+    private static final int HEIGHT = 770;
     private static final int UNIT = 12;
     private static final int DELAY = 40;
 
@@ -35,8 +35,8 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
     private int motoSize = 55;
 
     // Variables para ajustar la posición de las imágenes
-    private int imageOffsetX = -17;
-    private int imageOffsetY = -17;
+    private int imageOffsetX = -22;
+    private int imageOffsetY = -22;
 
     // Variables para habilidades especiales
     private boolean player1AbilityUsed = false;
@@ -88,7 +88,7 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
     private void inicializarMusicaJuego() {
         try {
             AudioInputStream audioInput = AudioSystem.getAudioInputStream(
-                    getClass().getResource("/assets/musicaJuego.wav") // Tu archivo de música del juego
+                    getClass().getResource("/assets/musicaJuego.wav")
             );
 
             musicaJuego = AudioSystem.getClip();
@@ -127,7 +127,7 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
             case "invisibilidad" -> "/assets/invisibilidad.wav";
             case "explosion" -> "/assets/explosion.wav";
             case "confusion" -> "/assets/confusion.wav";
-            default -> null; // No reproducir nada si no encuentra el tipo
+            default -> null;
         };
 
         if (archivo != null) {
@@ -302,7 +302,7 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
         } else if (player1Color == Color.YELLOW) {
             reproducirSonidoHabilidad("invisibilidad");
             player1Invisible = true;
-            player1InvisibleTimer = 30;
+            player1InvisibleTimer = 125;
             invisTimer1 = new Timer(DELAY, e -> {
                 player1InvisibleTimer--;
                 if (player1InvisibleTimer <= 0) {
@@ -319,7 +319,7 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
         } else if (player1Color == Color.GREEN) {
             reproducirSonidoHabilidad("confusion");
             player2ControlsInverted = true;
-            player2InvertTimer = 30;
+            player2InvertTimer = 125;
             invertTimer2 = new Timer(DELAY, e -> {
                 player2InvertTimer--;
                 if (player2InvertTimer <= 0) {
@@ -352,7 +352,7 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
         } else if (player2Color == Color.YELLOW) {
             reproducirSonidoHabilidad("invisibilidad");
             player2Invisible = true;
-            player2InvisibleTimer = 30;
+            player2InvisibleTimer = 125;
             invisTimer2 = new Timer(DELAY, e -> {
                 player2InvisibleTimer--;
                 if (player2InvisibleTimer <= 0) {
@@ -369,7 +369,7 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
         } else if (player2Color == Color.GREEN) {
             reproducirSonidoHabilidad("confusion");
             player1ControlsInverted = true;
-            player1InvertTimer = 30;
+            player1InvertTimer = 125;
             invertTimer1 = new Timer(DELAY, e -> {
                 player1InvertTimer--;
                 if (player1InvertTimer <= 0) {
@@ -495,13 +495,13 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
         g.drawString(p1Status, 10, 30);
 
         if (player1SpeedBoost) {
-            g.drawString("VELOCIDAD: " + (player1SpeedTimer/10 + 1) + "s", 10, 50);
+            g.drawString("VELOCIDAD: " + (player1SpeedTimer/25 + 1) + "s", 10, 50);
         }
         if (player1Invisible) {
-            g.drawString("INVISIBLE: " + (player1InvisibleTimer/10 + 1) + "s", 10, 50);
+            g.drawString("INVISIBLE: " + (player1InvisibleTimer/25 + 1) + "s", 10, 50);
         }
         if (player1ControlsInverted) {
-            g.drawString("CONTROLES INVERTIDOS: " + (player1InvertTimer/10 + 1) + "s", 10, 50);
+            g.drawString("CONTROLES INVERTIDOS: " + (player1InvertTimer/25 + 1) + "s", 10, 50);
         }
 
         g.setColor(player2Color);
@@ -514,13 +514,13 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
         g.drawString(p2Status, WIDTH - 200, 30);
 
         if (player2SpeedBoost) {
-            g.drawString("VELOCIDAD: " + (player2SpeedTimer/10 + 1) + "s", WIDTH - 200, 50);
+            g.drawString("VELOCIDAD: " + (player2SpeedTimer/25 + 1) + "s", WIDTH - 200, 50);
         }
         if (player2Invisible) {
-            g.drawString("INVISIBLE: " + (player2InvisibleTimer/10 + 1) + "s", WIDTH - 200, 50);
+            g.drawString("INVISIBLE: " + (player2InvisibleTimer/25 + 1) + "s", WIDTH - 200, 50);
         }
         if (player2ControlsInverted) {
-            g.drawString("CONTROLES INVERTIDOS: " + (player2InvertTimer/10 + 1) + "s", WIDTH - 200, 50);
+            g.drawString("CONTROLES INVERTIDOS: " + (player2InvertTimer/25 + 1) + "s", WIDTH - 200, 50);
         }
     }
 
@@ -716,6 +716,7 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
 
         // Asegurar limpieza al cerrar
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
