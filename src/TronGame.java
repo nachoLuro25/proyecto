@@ -9,10 +9,10 @@ import java.io.IOException;
 
 public class TronGame extends JPanel implements ActionListener, KeyListener {
 
-    private static final int WIDTH = 1200;
-    private static final int HEIGHT = 800;
-    private static final int UNIT = 20;
-    private static final int DELAY = 100;
+    private static final int WIDTH = 1920;
+    private static final int HEIGHT = 1080;
+    private static final int UNIT = 12;
+    private static final int DELAY = 40;
 
     private LinkedList<Point> player1Trail = new LinkedList<>();
     private LinkedList<Point> player2Trail = new LinkedList<>();

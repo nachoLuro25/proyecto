@@ -14,6 +14,8 @@ public class VentanaPrincipal extends JFrame {
     private Clip musicaMenu;
     private boolean musicaActiva = false;
 
+
+
     public VentanaPrincipal() {
         setTitle("CYCLE WARS - Menú Principal");
         setSize(1400, 900);
@@ -21,7 +23,6 @@ public class VentanaPrincipal extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Inicializar la música del menú
         inicializarMusicaMenu();
 
         fondoMenu = new ImageIcon(getClass().getResource("/assets/fondoMenu.png")).getImage();
@@ -34,69 +35,59 @@ public class VentanaPrincipal extends JFrame {
             }
         };
 
+// Calcular posición centrada horizontalmente
+        int anchoVentana = 1400;
+        int anchoBoton = 300;
+        int altoBoton = 80;
+        int xCentrado = (anchoVentana - anchoBoton) / 2;
+
+        // Posición vertical más baja (más abajo en la pantalla)
+        int yInicial = 430;
+        int espaciado = 90;
+
         // Botón INICIAR JUEGO
-        JButton jugarBtn = crearBotonMenu("/assets/btnJugar.png", 220, 50);
-        jugarBtn.setBounds(600, 300, 220, 50);
+        JButton jugarBtn = crearBotonMenu("/assets/jugar.png", 300, 80);
+        jugarBtn.setBounds(xCentrado, yInicial, anchoBoton, altoBoton);
         jugarBtn.addActionListener(e -> abrirSeleccionJugadores());
         panelConFondo.add(jugarBtn);
 
         // Botón CONFIGURACIÓN
-        JButton configBtn = crearBotonMenu("/assets/configuracion.png", 220, 50);
-        configBtn.setBounds(600, 370, 220, 50);
+        JButton configBtn = crearBotonMenu("/assets/configuracion.png", 300, 80);
+        configBtn.setBounds(xCentrado, yInicial + espaciado, anchoBoton, altoBoton);
         configBtn.addActionListener(e -> abrirConfiguracion());
         panelConFondo.add(configBtn);
 
         // Botón AYUDA
-        JButton ayudaBtn = crearBotonMenu("/assets/btnAyuda.png", 220, 50);
-        ayudaBtn.setBounds(600, 440, 220, 50);
+        JButton ayudaBtn = crearBotonMenu("/assets/comojugar.png", 300, 80);
+        ayudaBtn.setBounds(xCentrado, yInicial + (espaciado * 2), anchoBoton, altoBoton);
         ayudaBtn.addActionListener(e -> mostrarAyuda());
         panelConFondo.add(ayudaBtn);
 
         // Botón SALIR
-        JButton salirBtn = crearBotonMenu("/assets/salir.png", 220, 50);
-        salirBtn.setBounds(600, 510, 220, 50);
+        JButton salirBtn = crearBotonMenu("/assets/salir.png", 300, 80);
+        salirBtn.setBounds(xCentrado, yInicial + (espaciado * 3), anchoBoton, altoBoton);
         salirBtn.addActionListener(e -> {
             detenerMusicaMenu();
             System.exit(0);
         });
         panelConFondo.add(salirBtn);
 
-        // Botón para pausar/reanudar música
-        JButton musicaBtn = new JButton(musicaActiva ? "🔇 Silenciar" : "🔊 Música");
-        musicaBtn.setBounds(50, 50, 120, 30);
-        musicaBtn.setFont(new Font("Arial", Font.BOLD, 12));
-        musicaBtn.addActionListener(e -> {
-            if (musicaActiva) {
-                pausarMusicaMenu();
-                musicaBtn.setText("🔊 Música");
-            } else {
-                reanudarMusicaMenu();
-                musicaBtn.setText("🔇 Silenciar");
-            }
-        });
-        panelConFondo.add(musicaBtn);
-
         setContentPane(panelConFondo);
         setVisible(true);
     }
 
-    // Método para inicializar la música del menú
     private void inicializarMusicaMenu() {
         try {
-            // Cargar el archivo de música desde la carpeta assets
             AudioInputStream audioInput = AudioSystem.getAudioInputStream(
-                    getClass().getResource("/assets/musicaMenu.wav") // Cambia por tu archivo
+                    getClass().getResource("/assets/musicaMenu.wav")
             );
 
             musicaMenu = AudioSystem.getClip();
             musicaMenu.open(audioInput);
-
-            // Reproducir en bucle infinito
             musicaMenu.loop(Clip.LOOP_CONTINUOUSLY);
             musicaActiva = true;
 
-            // Ajustar el volumen (opcional)
-            ajustarVolumen(musicaMenu, -10.0f); // Reducir 10 dB
+            ajustarVolumen(musicaMenu, -10.0f);
 
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             System.out.println("Error al cargar la música del menú: " + e.getMessage());
@@ -104,7 +95,6 @@ public class VentanaPrincipal extends JFrame {
         }
     }
 
-    // Método para ajustar el volumen
     private void ajustarVolumen(Clip clip, float volumenDB) {
         try {
             FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -114,7 +104,6 @@ public class VentanaPrincipal extends JFrame {
         }
     }
 
-    // Método para pausar la música del menú
     private void pausarMusicaMenu() {
         if (musicaMenu != null && musicaMenu.isRunning()) {
             musicaMenu.stop();
@@ -122,16 +111,14 @@ public class VentanaPrincipal extends JFrame {
         }
     }
 
-    // Método para reanudar la música del menú
     private void reanudarMusicaMenu() {
         if (musicaMenu != null && !musicaMenu.isRunning()) {
-            musicaMenu.setFramePosition(0); // Empezar desde el inicio
+            musicaMenu.setFramePosition(0);
             musicaMenu.loop(Clip.LOOP_CONTINUOUSLY);
             musicaActiva = true;
         }
     }
 
-    // Método para detener completamente la música del menú
     private void detenerMusicaMenu() {
         if (musicaMenu != null) {
             musicaMenu.stop();
@@ -140,9 +127,6 @@ public class VentanaPrincipal extends JFrame {
         }
     }
 
-    // Método para reproducir sonido de click en botones - ELIMINADO
-
-    // Método para crear botones con imagen en el menú
     private JButton crearBotonMenu(String rutaImagen, int ancho, int alto) {
         JButton btn;
         try {
@@ -150,7 +134,7 @@ public class VentanaPrincipal extends JFrame {
             Image img = icon.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
             btn = new JButton(new ImageIcon(img));
         } catch (Exception e) {
-            btn = new JButton("BOTÓN"); // fallback si no encuentra la imagen
+            btn = new JButton("BOTÓN");
         }
         btn.setFocusPainted(false);
         btn.setBorderPainted(false);
@@ -158,93 +142,201 @@ public class VentanaPrincipal extends JFrame {
         return btn;
     }
 
-    // Ventana de selección de jugadores
+    // Ventana de selección de jugadores MEJORADA
     private void abrirSeleccionJugadores() {
-        JFrame frameSeleccion = new JFrame("Seleccionar Colores - Cycle Wars");
-        frameSeleccion.setSize(1200, 550);
+        JFrame frameSeleccion = new JFrame("Seleccionar Motos - Cycle Wars");
+        frameSeleccion.setSize(1200, 650);
         frameSeleccion.setLocationRelativeTo(this);
         frameSeleccion.setLayout(new BorderLayout());
 
-        JPanel panelPrincipal = new JPanel(new GridLayout(1, 2, 20, 20));
-        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel panelPrincipal = new JPanel(new GridLayout(1, 2, 30, 20));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(30, 30, 20, 30));
         panelPrincipal.setBackground(Color.BLACK);
 
+        // Variables locales para tracking de selección
+        final JButton[] botonSelJ1 = new JButton[1]; // Array para poder modificar desde lambda
+        final JButton[] botonSelJ2 = new JButton[1];
+
         // Jugador 1
-        JPanel panelJ1 = new JPanel(new BorderLayout());
+        JPanel panelJ1 = new JPanel(new BorderLayout(10, 10));
         panelJ1.setBackground(Color.BLACK);
+        panelJ1.setBorder(BorderFactory.createLineBorder(Color.CYAN, 3));
 
-        JLabel labelJ1 = new JLabel("JUGADOR 1", SwingConstants.CENTER);
-        labelJ1.setFont(new Font("Consolas", Font.BOLD, 26));
+        JLabel labelJ1 = new JLabel("⚡ JUGADOR 1 ⚡", SwingConstants.CENTER);
+        labelJ1.setFont(new Font("Consolas", Font.BOLD, 28));
         labelJ1.setForeground(Color.CYAN);
+        labelJ1.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
 
-        JPanel opcionesJ1 = new JPanel(new GridLayout(2, 2, 10, 10));
+        JPanel opcionesJ1 = new JPanel(new GridLayout(2, 2, 15, 15));
         opcionesJ1.setBackground(Color.BLACK);
-        opcionesJ1.add(crearBotonColor("/assets/perfilRojo.png", Color.RED, true));
-        opcionesJ1.add(crearBotonColor("/assets/perfilAzul.png", Color.BLUE, true));
-        opcionesJ1.add(crearBotonColor("/assets/perfilAmarillo.png", Color.YELLOW, true));
-        opcionesJ1.add(crearBotonColor("/assets/perfilVerde.png", Color.GREEN, true));
+        opcionesJ1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Label para mostrar selección actual
+        JLabel seleccionJ1 = new JLabel("Color: ROJO", SwingConstants.CENTER);
+        seleccionJ1.setFont(new Font("Consolas", Font.BOLD, 18));
+        seleccionJ1.setForeground(Color.RED);
+        seleccionJ1.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        JButton btnRojoJ1 = crearBotonColorMejorado("/assets/perfilRojo.png", Color.RED, "ROJO",
+                botonSelJ1, Color.CYAN, seleccionJ1, true);
+        JButton btnAzulJ1 = crearBotonColorMejorado("/assets/perfilAzul.png", Color.BLUE, "AZUL",
+                botonSelJ1, Color.CYAN, seleccionJ1, true);
+        JButton btnAmarilloJ1 = crearBotonColorMejorado("/assets/perfilAmarillo.png", Color.YELLOW, "AMARILLO",
+                botonSelJ1, Color.CYAN, seleccionJ1, true);
+        JButton btnVerdeJ1 = crearBotonColorMejorado("/assets/perfilVerde.png", Color.GREEN, "VERDE",
+                botonSelJ1, Color.CYAN, seleccionJ1, true);
+
+        opcionesJ1.add(btnRojoJ1);
+        opcionesJ1.add(btnAzulJ1);
+        opcionesJ1.add(btnAmarilloJ1);
+        opcionesJ1.add(btnVerdeJ1);
 
         panelJ1.add(labelJ1, BorderLayout.NORTH);
         panelJ1.add(opcionesJ1, BorderLayout.CENTER);
+        panelJ1.add(seleccionJ1, BorderLayout.SOUTH);
 
         // Jugador 2
-        JPanel panelJ2 = new JPanel(new BorderLayout());
+        JPanel panelJ2 = new JPanel(new BorderLayout(10, 10));
         panelJ2.setBackground(Color.BLACK);
+        panelJ2.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 3));
 
-        JLabel labelJ2 = new JLabel("JUGADOR 2", SwingConstants.CENTER);
-        labelJ2.setFont(new Font("Consolas", Font.BOLD, 26));
-        labelJ2.setForeground(Color.CYAN);
+        JLabel labelJ2 = new JLabel("⚡ JUGADOR 2 ⚡", SwingConstants.CENTER);
+        labelJ2.setFont(new Font("Consolas", Font.BOLD, 28));
+        labelJ2.setForeground(Color.MAGENTA);
+        labelJ2.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
 
-        JPanel opcionesJ2 = new JPanel(new GridLayout(2, 2, 10, 10));
+        JPanel opcionesJ2 = new JPanel(new GridLayout(2, 2, 15, 15));
         opcionesJ2.setBackground(Color.BLACK);
-        opcionesJ2.add(crearBotonColor("/assets/perfilRojo.png", Color.RED, false));
-        opcionesJ2.add(crearBotonColor("/assets/perfilAzul.png", Color.BLUE, false));
-        opcionesJ2.add(crearBotonColor("/assets/perfilAmarillo.png", Color.YELLOW, false));
-        opcionesJ2.add(crearBotonColor("/assets/perfilVerde.png", Color.GREEN, false));
+        opcionesJ2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Label para mostrar selección actual
+        JLabel seleccionJ2 = new JLabel("Color: AZUL", SwingConstants.CENTER);
+        seleccionJ2.setFont(new Font("Consolas", Font.BOLD, 18));
+        seleccionJ2.setForeground(Color.BLUE);
+        seleccionJ2.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        JButton btnRojoJ2 = crearBotonColorMejorado("/assets/perfilRojo.png", Color.RED, "ROJO",
+                botonSelJ2, Color.MAGENTA, seleccionJ2, false);
+        JButton btnAzulJ2 = crearBotonColorMejorado("/assets/perfilAzul.png", Color.BLUE, "AZUL",
+                botonSelJ2, Color.MAGENTA, seleccionJ2, false);
+        JButton btnAmarilloJ2 = crearBotonColorMejorado("/assets/perfilAmarillo.png", Color.YELLOW, "AMARILLO",
+                botonSelJ2, Color.MAGENTA, seleccionJ2, false);
+        JButton btnVerdeJ2 = crearBotonColorMejorado("/assets/perfilVerde.png", Color.GREEN, "VERDE",
+                botonSelJ2, Color.MAGENTA, seleccionJ2, false);
+
+        opcionesJ2.add(btnRojoJ2);
+        opcionesJ2.add(btnAzulJ2);
+        opcionesJ2.add(btnAmarilloJ2);
+        opcionesJ2.add(btnVerdeJ2);
 
         panelJ2.add(labelJ2, BorderLayout.NORTH);
         panelJ2.add(opcionesJ2, BorderLayout.CENTER);
+        panelJ2.add(seleccionJ2, BorderLayout.SOUTH);
 
         panelPrincipal.add(panelJ1);
         panelPrincipal.add(panelJ2);
 
-        // Botón comenzar
-        JButton comenzarBtn = new JButton("COMENZAR");
+        // Panel inferior con botones
+        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelInferior.setBackground(Color.BLACK);
+
+        JButton volverBtn = new JButton("⬅ VOLVER");
+        volverBtn.setFont(new Font("Consolas", Font.BOLD, 18));
+        volverBtn.setBackground(Color.DARK_GRAY);
+        volverBtn.setForeground(Color.WHITE);
+        volverBtn.setPreferredSize(new Dimension(150, 45));
+        volverBtn.addActionListener(e -> frameSeleccion.dispose());
+
+        JButton comenzarBtn = new JButton("▶ COMENZAR");
         comenzarBtn.setFont(new Font("Consolas", Font.BOLD, 20));
+        comenzarBtn.setBackground(new Color(0, 200, 0));
+        comenzarBtn.setForeground(Color.WHITE);
+        comenzarBtn.setPreferredSize(new Dimension(200, 50));
         comenzarBtn.addActionListener(e -> {
-            // AQUÍ ES DONDE SE DETIENE LA MÚSICA DEL MENÚ
+            if (colorJugador1.equals(colorJugador2)) {
+                JOptionPane.showMessageDialog(frameSeleccion,
+                        "⚠ Los jugadores no pueden elegir el mismo color",
+                        "Error de selección",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             detenerMusicaMenu();
             frameSeleccion.dispose();
             abrirJuego();
         });
 
+        panelInferior.add(volverBtn);
+        panelInferior.add(comenzarBtn);
+
         frameSeleccion.add(panelPrincipal, BorderLayout.CENTER);
-        frameSeleccion.add(comenzarBtn, BorderLayout.SOUTH);
+        frameSeleccion.add(panelInferior, BorderLayout.SOUTH);
         frameSeleccion.getContentPane().setBackground(Color.BLACK);
         frameSeleccion.setVisible(true);
+
+        // Marcar selección inicial
+        botonSelJ1[0] = btnRojoJ1;
+        botonSelJ2[0] = btnAzulJ2;
+        btnRojoJ1.setBorder(BorderFactory.createLineBorder(Color.CYAN, 4));
+        btnAzulJ2.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 4));
     }
 
-    // Crea un botón con imagen escalada para selección de personajes
-    private JButton crearBotonColor(String rutaImagen, Color color, boolean esJugador1) {
+    // Crea un botón con imagen escalada y efecto de selección
+    private JButton crearBotonColorMejorado(String rutaImagen, Color color, String nombreColor,
+                                            JButton[] botonSeleccionado, Color colorBorde,
+                                            JLabel labelSeleccion, boolean esJugador1) {
         JButton btn;
         try {
             ImageIcon icon = new ImageIcon(getClass().getResource(rutaImagen));
-            Image img = icon.getImage().getScaledInstance(270, 250, Image.SCALE_SMOOTH);
+            Image img = icon.getImage().getScaledInstance(240, 220, Image.SCALE_SMOOTH);
             btn = new JButton(new ImageIcon(img));
         } catch (Exception e) {
-            btn = new JButton();
+            btn = new JButton(nombreColor);
             btn.setBackground(color);
+            btn.setForeground(Color.WHITE);
+            btn.setFont(new Font("Consolas", Font.BOLD, 16));
         }
-        btn.setBorderPainted(false);
-        btn.setContentAreaFilled(false);
 
-        // Acción al hacer clic (selección de personaje)
+        btn.setContentAreaFilled(false);
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+
+        // Efecto hover
+        JButton finalBtn1 = btn;
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (finalBtn1 != botonSeleccionado[0]) {
+                    finalBtn1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
+                }
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                if (finalBtn1 != botonSeleccionado[0]) {
+                    finalBtn1.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+                }
+            }
+        });
+
+        // Acción al hacer clic
+        JButton finalBtn = btn;
         btn.addActionListener(e -> {
+            // Quitar borde del botón anterior
+            if (botonSeleccionado[0] != null) {
+                botonSeleccionado[0].setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+            }
+
+            // Actualizar color del jugador
             if (esJugador1) {
                 colorJugador1 = color;
             } else {
                 colorJugador2 = color;
             }
+
+            // Actualizar label de selección
+            labelSeleccion.setText("Color: " + nombreColor);
+            labelSeleccion.setForeground(color);
+
+            // Marcar nuevo botón seleccionado
+            botonSeleccionado[0] = finalBtn;
+            finalBtn.setBorder(BorderFactory.createLineBorder(colorBorde, 4));
         });
 
         return btn;
@@ -254,17 +346,38 @@ public class VentanaPrincipal extends JFrame {
         JFrame frameConfig = new JFrame("Configuración - Cycle Wars");
         frameConfig.setSize(400, 200);
         frameConfig.setLocationRelativeTo(this);
-        frameConfig.setLayout(new BorderLayout());
+        frameConfig.setLayout(new BorderLayout(10, 10));
 
-        JLabel lblBrillo = new JLabel("Brillo del juego", JLabel.CENTER);
-        JSlider sliderBrillo = new JSlider(0, 100, 50);
-        sliderBrillo.setMajorTickSpacing(25);
-        sliderBrillo.setPaintTicks(true);
-        sliderBrillo.setPaintLabels(true);
+        JPanel panelVolumen = new JPanel(new BorderLayout(5, 5));
+        panelVolumen.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        frameConfig.add(lblBrillo, BorderLayout.NORTH);
-        frameConfig.add(sliderBrillo, BorderLayout.CENTER);
+        JLabel lblVolumen = new JLabel("🔊 Volumen", JLabel.CENTER);
+        lblVolumen.setFont(new Font("Arial", Font.BOLD, 16));
 
+        JSlider sliderVolumen = new JSlider(-30, 6, -10);
+        sliderVolumen.setPaintTicks(false);
+        sliderVolumen.setPaintLabels(false);
+
+        // Label para mostrar el porcentaje
+        JLabel lblPorcentaje = new JLabel("56%", JLabel.CENTER);
+        lblPorcentaje.setFont(new Font("Arial", Font.BOLD, 14));
+
+        sliderVolumen.addChangeListener(e -> {
+            // Convertir rango -30 a 6 en porcentaje 0% a 100%
+            int valorDB = sliderVolumen.getValue();
+            int porcentaje = (int) (((valorDB + 30) / 36.0) * 100);
+            lblPorcentaje.setText(porcentaje + "%");
+
+            if (!sliderVolumen.getValueIsAdjusting()) {
+                ajustarVolumen(musicaMenu, (float) valorDB);
+            }
+        });
+
+        panelVolumen.add(lblVolumen, BorderLayout.NORTH);
+        panelVolumen.add(sliderVolumen, BorderLayout.CENTER);
+        panelVolumen.add(lblPorcentaje, BorderLayout.SOUTH);
+
+        frameConfig.add(panelVolumen, BorderLayout.CENTER);
         frameConfig.setVisible(true);
     }
 
@@ -322,17 +435,14 @@ public class VentanaPrincipal extends JFrame {
         frameJuego.setLocationRelativeTo(null);
         frameJuego.setVisible(true);
 
-        // Opcional: Si quieres que la música del menú se reanude cuando cierren el juego
         frameJuego.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                // Reanudar música del menú cuando se cierre el juego
                 reanudarMusicaMenu();
             }
         });
     }
 
-    // Método para liberar recursos al cerrar la ventana principal
     @Override
     public void dispose() {
         detenerMusicaMenu();
