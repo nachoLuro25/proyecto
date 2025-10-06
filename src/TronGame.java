@@ -485,6 +485,7 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
     private void drawAbilityStatus(Graphics g) {
         g.setFont(new Font("Arial", Font.BOLD, 14));
 
+        // Jugador 1
         g.setColor(player1Color);
         String p1Status = "J1: ";
         if (player1AbilityUsed) {
@@ -494,16 +495,20 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
         }
         g.drawString(p1Status, 10, 30);
 
+        int p1Line = 50;
         if (player1SpeedBoost) {
-            g.drawString("VELOCIDAD: " + (player1SpeedTimer/25 + 1) + "s", 10, 50);
+            g.drawString("VELOCIDAD: " + (player1SpeedTimer/25 + 1) + "s", 10, p1Line);
+            p1Line += 20;
         }
         if (player1Invisible) {
-            g.drawString("INVISIBLE: " + (player1InvisibleTimer/25 + 1) + "s", 10, 50);
+            g.drawString("INVISIBLE: " + (player1InvisibleTimer/25 + 1) + "s", 10, p1Line);
+            p1Line += 20;
         }
         if (player1ControlsInverted) {
-            g.drawString("CONTROLES INVERTIDOS: " + (player1InvertTimer/25 + 1) + "s", 10, 50);
+            g.drawString("CONTROLES INVERTIDOS: " + (player1InvertTimer/25 + 1) + "s", 10, p1Line);
         }
 
+        // Jugador 2
         g.setColor(player2Color);
         String p2Status = "J2: ";
         if (player2AbilityUsed) {
@@ -513,14 +518,17 @@ public class TronGame extends JPanel implements ActionListener, KeyListener {
         }
         g.drawString(p2Status, WIDTH - 200, 30);
 
+        int p2Line = 50;
         if (player2SpeedBoost) {
-            g.drawString("VELOCIDAD: " + (player2SpeedTimer/25 + 1) + "s", WIDTH - 200, 50);
+            g.drawString("VELOCIDAD: " + (player2SpeedTimer/25 + 1) + "s", WIDTH - 200, p2Line);
+            p2Line += 20;
         }
         if (player2Invisible) {
-            g.drawString("INVISIBLE: " + (player2InvisibleTimer/25 + 1) + "s", WIDTH - 200, 50);
+            g.drawString("INVISIBLE: " + (player2InvisibleTimer/25 + 1) + "s", WIDTH - 200, p2Line);
+            p2Line += 20;
         }
         if (player2ControlsInverted) {
-            g.drawString("CONTROLES INVERTIDOS: " + (player2InvertTimer/25 + 1) + "s", WIDTH - 200, 50);
+            g.drawString("CONTROLES INVERTIDOS: " + (player2InvertTimer/25 + 1) + "s", WIDTH - 200, p2Line);
         }
     }
 
